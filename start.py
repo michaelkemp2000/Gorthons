@@ -1,4 +1,6 @@
-# Now import your Phone Package.
+# start.py
+
+# Now import your v1 Package.
 import v1
 from sys import exit
 from random import randint
@@ -33,10 +35,10 @@ gb_state = gorthon_general.check_alive()
 gb_state = gorthon_general.check_health()
 
 
-print "\nHero: [%s] - %s" % (h_state, h_health)
-print "\nGorthon Guard: [%s] - %s" % (h_state, h_health)
-print "\nGorthon Soldier: [%s] - %s" % (h_state, h_health)
-print "\nGorthon General: [%s] - %s" % (h_state, h_health)
+print "\nHero: [%s] - %d" % (h_state, h_health)
+print "\nGorthon Guard: [%s] - %d" % (h_state, h_health)
+print "\nGorthon Soldier: [%s] - %d" % (h_state, h_health)
+print "\nGorthon General: [%s] - %d" % (h_state, h_health)
 
 # Print Character items
 h_items = hero.check_contents()
@@ -52,4 +54,10 @@ print "\nGorthon General - List of items: %r" % (gb_items)
 hero.set_health(0)
 hero.set_alive('n')
 gorthon_guard.set_health(0)
-hero.set_alive('n')
+gorthon_guard.set_alive('n')
+
+# Test battle
+
+a_battle = v1.Fight(hero, gorthon_guard)
+result = a_battle.attack()
+print result

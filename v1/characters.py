@@ -16,10 +16,10 @@ class State(object):
 	def check_alive(self):
 
 		if self.alive == 'y' or self.alive =='Y':
-			return "Alive!"
+			return True
 
 		elif self.alive == 'n' or self.alive =='N':
-			return "Dead!"
+			return False
 
 		else:
 			print "DOES NOT COMPUTE: You fumble around and get shot."
@@ -29,20 +29,16 @@ class State(object):
 
 		self.update = update
 		self.alive = self.update
-		life = self.check_alive()
-		print life
 
 	def check_health(self):
 
-		health = "Health: [%s]" % (self.health)
+		health = self.health
 		return health
 
 	def set_health(self, update):
 
 		self.update = update
 		self.health = self.update
-		hp = self.check_health()
-		print hp
 
 
 class Inventory(object):
