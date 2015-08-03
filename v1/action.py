@@ -2,9 +2,9 @@
 
 from sys import exit
 from random import randint
+import scenes
 
 class Engine(object):
-
 
 	def __init__(self, scene_map):
 
@@ -25,91 +25,6 @@ class Engine(object):
 			next_scene_name = curent_scene.enter()
 			curent_scene = self.scene_map.next_scene(next_scene_name)
 
-#Battle class
-class Battle(object):
-
-
-	# Define Battle and pass in who is doing battle,
-	# In this games case, alien and hero, probably should be a list of potential
-	# characters if the game was to be extended, not hard coded expectations.
-	def __init__(self, alien, hero):
-
-		self.alien = alien
-		self.hero = hero
-
-	# Hero attack function.
-	def attack(self):
-		
-		# Depending on the weapon defined, we hard code attack power.
-		# If we were to extend the game, probably attack power would be
-		# passed in with the item, vs hard coded.
-		# The same could be true with behaviour.
-		weapon = Hero.items.get('weapon')
-		print weapon
-		if self.alien.health > 0:
-			print "\nThe Alien shouts ggrazadbog!"
-			print "You fire your weapon at the Gorthon."
-			while self.alien.health > 0:
-				if weapon == 'laser gun':
-					a_damage = randint(1,4)
-					print "zap: [-%d] hit point!" % a_damage 
-					self.alien.reduce_health(a_damage)
-					if self.alien.health > 0:
-						print "He is not dead!"
-						self.defend()
-					
-					else:
-						print "You killed the Gorthon"
-						return 'hero'
-				else:
-					a_damage = randint(5,10)
-					print "zap: [-%d] hit point!" % a_damage 
-					self.alien.reduce_health(a_damage)
-					if self.alien.health > 0:
-						print "He is not dead!"
-						self.defend()
-						return 'hero'
-					else:
-						print "You killed the Gorthon"
-						return 'hero'
-				return 'alien'
-			if self.alien.health < 0:
-				print "You killed the Gorthon"
-				return 'hero'
-
-		else:
-			print "\nThe Gorthon is already dead"
-			return 'hero'
-
-	# Function for when the Hero is defending against an alien attack.
-	def defend(self):
-
-		print "\nThe Gortham starts shooting at you!"
-
-		while self.hero.health > 0 and self.alien.health >0:
-			h_damage = randint(1,4)
-			print "zap: [-%d] damage!" % h_damage
-			self.hero.reduce_health(h_damage)
-			print "Health remaining: [%d]" % self.hero.health
-
-			if self.hero.health > 0:
-				print "Shoot or Run (S or R)"
-				atk = raw_input("-->")
-
-				if atk == 's' or atk == 'S':
-					self.attack()
-
-				elif atk == 'r' or atk == 'R':
-					print "You flee like a coward and get shot."
-					return 'alien'
-
-				else:
-					print "DOES NOT COMPUTE: You fumble around and get shot."
-					return 'alien'
-
-			else:
-				print "You sustain a fatal wound."
-				return 'alien'
 
 # Map Class
 class Map(object):
@@ -118,12 +33,12 @@ class Map(object):
 	# Dictionary of all the different scenes that are looked up
 	# by the Engine class to determine what is the next scene.
 	scenes = {
-		'central_corridor': CentralCorridor(),
-		'lwa': LaserWeaponArmory(),
-		'the_bridge': TheBridge(),
-		'escape_pod': EscapePod(),
-		'planet': Planet(),
-		'death': Death()
+		'central_corridor': scenes.CentralCorridor(),
+	#	'lwa': scenes.LaserWeaponArmory(),
+	#	'the_bridge': scenes.TheBridge(),
+	#	'escape_pod': scenes.EscapePod(),
+	#	'planet': scenes.Planet(),
+		'death': scenes.Death()
 		}
 
 	# Specifies the start scene, where the game starts.

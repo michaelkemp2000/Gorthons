@@ -15,10 +15,10 @@ class State(object):
 
 	def check_alive(self):
 
-		if self.alive == 'y' or self.alive =='Y':
+		if self.alive == True or self.alive == True:
 			return True
 
-		elif self.alive == 'n' or self.alive =='N':
+		elif self.alive == False or self.alive == False:
 			return False
 
 		else:
@@ -53,6 +53,11 @@ class Inventory(object):
 	def check_contents(self):
 
 		content = self.inventory.items()
+		return content
+
+	def check_one(self, item):
+
+		content = self.inventory.get(item)
 		return content
 
 	def set_contents(self, iname, ivalue):
@@ -97,13 +102,18 @@ class Person(object):
 		content = self.inventory.check_contents()
 		return content
 
+	def check_one(self, item):
+
+		content = self.inventory.check_one(item)
+		return content
+
 	def set_contents(self, iname, ivalue):
 
 		self.iname = iname
 		self.ivalue = ivalue
 		self.inventory.set_contents(self.iname, self.ivalue)
 
-# ------------------------Module tests------------------------------------------
+# Local Module Tests
 
 # Instanciate Character defaults
 #hero = Person('y', 100)

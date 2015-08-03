@@ -2,6 +2,8 @@
 
 from sys import exit
 from random import randint
+from characters import Person
+from battle import Fight
 
 # Scene Parent Class Placeholder
 
@@ -33,6 +35,11 @@ class Death(Scene):
 # Escape Pod Child Class to Scene
 class EscapePod(Scene):
 	
+
+	def __init__(self, ch1, b2):
+
+		self.ch1 = ch1
+		self.b2 = b2
 
 	# Function to define what happens when you enter the scene.
 	def enter(self):
@@ -77,14 +84,14 @@ class EscapePod(Scene):
 			print "You hear a voice in your mind, could this be from the Gorthon general."  
 			print "Does he have some kind of telepathic ability."
 			print "You cannot defeat me!"
-			weapon = a_hero.items.get('weapon')
+			weapon = self.ch1.check_one('weapon')
 
 			if weapon == 'plasma cannon':
 				print "you pull out your plasma cannon"
 				print "The Gorthon looks concerned and backs up"
-				winner = b_battle.attack()
+				winner2 = self.b2.attack()
 
-				if winner == 'hero':
+				if winner2 == 'hero':
 					print "You fall to the ground you head is hurting."
 					print "All of a sudden you feel very different."
 					print "You aquire the general\'s telepathic abilities."
@@ -96,7 +103,7 @@ class EscapePod(Scene):
 					print "like a bright star, taking out the Gorthon ship also."
 					return 'planet'
 
-				elif winner == 'alien':
+				elif winner2 == 'enemy':
 					print "Fatal shot, you cannot sustain this injury!"
 					return 'death'
 
@@ -106,9 +113,9 @@ class EscapePod(Scene):
 			else:
 				print "This Gorthon is much bigger than you are with some serious armor."
 				print "This may not go well"
-				winner = b_battle.attack()
+				winner2 = self.b2.attack()
 
-				if winner == 'hero':
+				if winner2 == 'hero':
 					print "You fall to the ground you head is hurting."
 					print "All of a sudden you feel very different."
 					print "You aquire the general\'s telepathic abilities."
@@ -120,7 +127,7 @@ class EscapePod(Scene):
 					print "like a bright star, taking out the Gorthon ship also."
 					return 'planet'
 
-				elif winner == 'alien':
+				elif winner2 == 'enemy':
 					print 'Try looking for a better weapon to defeat the general somewhere in this game (L)'
 					return 'death'
 
@@ -128,7 +135,7 @@ class EscapePod(Scene):
 					return 'death'
 
 
-# Planet Child Class to Scene
+# # Planet Child Class to Scene
 class Planet(Scene):
 
 
@@ -144,6 +151,11 @@ class Planet(Scene):
 # Central Corridor Child Class to Scene
 class CentralCorridor(Scene):
 
+	def __init__(self, ch1, b1):
+
+		self.ch1 = ch1
+		self.b1 = b1
+
 
 	# Function to define what happens when you enter the scene.
 	def enter(self):
@@ -157,11 +169,13 @@ class CentralCorridor(Scene):
 			cc_opt = raw_input("-->")
 
 			if cc_opt == 'a' or cc_opt == 'A':
-				winner = a_battle.attack()
+				winner = self.b1.attack()
 
 				if winner == 'hero':
 					print "\nYou pickup a passcode from his dead corpse"
-					a_hero.add_item('passcode', '1234')
+					ivalue = "%d%d%d" % (randint(1,9), randint(1,9),
+		 									randint(1,9))
+					self.ch1.set_contents('passcode', ivalue)
 					print "Go to the Laser Weapons Armory (L)"
 					print "Go to the Bridge (B)"
 					print "Go to the escape pod (E)"
@@ -201,6 +215,10 @@ class CentralCorridor(Scene):
 class LaserWeaponArmory(Scene):
 	
 
+	def __init__(self, ch1):
+
+		self.ch1 = ch1
+
 	# Function to define what happens when you enter the scene.
 	def enter(self):
 
@@ -223,10 +241,10 @@ class LaserWeaponArmory(Scene):
 				guess = raw_input("[keypad]>")
 				guesses = 0
 
-				if guess == Hero.items.get('passcode'):
+				if guess == self.ch1.check_one('passcode'):
 					print "The container clicks open and the seal breaks, letting gas out."
 					print "You grab the neutron bomb and head to the bridge."
-					Hero.items['bomb'] = "neutron"
+					self.ch1.set_contents('weapon2', 'neutron bomb')
 					return 'the_bridge'
 
 				# Increment keypad guesses
@@ -248,7 +266,7 @@ class LaserWeaponArmory(Scene):
 					return 'death'
 
 			elif ans1 == 'C' or ans1 == 'c':
-				pc = Hero.items.get('passcode')
+				pc = self.ch1.check_one('passcode')
 				if pc != '1':
 					print "You need the Neutron Bomb! You're not in time to save the ship and planet."
 					return 'death'
@@ -257,12 +275,13 @@ class LaserWeaponArmory(Scene):
 					return 'central_corridor'
 
 			elif ans1 == 'I' or ans1 == 'i':
-				print "you look in you pocket and find: ", Hero.items['passcode']
+				passcode = self.ch1.check_one('passcode')
+				print "you look in you pocket and find: ", passcode
 
 			elif ans1 == 'L' or ans1 == 'l':
 				print "You examine the room and find a plasma cannon hidden under some large"
 				print "containers that must have falled due to the attach on your ship."
-				a_hero.set_weapon('weapon', 'plasma cannon')
+				self.ch1.set_contents('weapon', 'plasma cannon')
 
 			else:
 				print "DOES NOT COMPUTE!"
@@ -272,13 +291,16 @@ class LaserWeaponArmory(Scene):
 # Bridge Child Class to Scene
 class TheBridge(Scene):
 
+	def __init__(self, ch1):
+
+		self.ch1 = ch1
 
 	# Function to define what happens when you enter the scene.
 	def enter(self):
 
 		# See if the hero has the bomb from laser weapon armory.
-		bomb = Hero.items.get('bomb')
-		if bomb == 'neutron':
+		bomb = self.ch1.check_one('weapon2')
+		if bomb == 'neutron bomb':
 			print "\nYou burst into the Bridge with the neutron destruction bomb under your arm" 
 			print "and surprise 5 Gorthons who are trying to take control of the ship.\n"
 			print "They haven\'t taken thier weapons out yet, and they see the active bomb under your arm"

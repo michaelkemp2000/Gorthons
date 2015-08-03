@@ -2,3 +2,4 @@
 
 from characters import Person
 from battle import Fight
+from scenes import *
